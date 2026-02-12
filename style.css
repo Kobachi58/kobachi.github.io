@@ -477,7 +477,7 @@ footer {
 
     /* 1. コンテナ：PC版のabsoluteを維持しつつ、スマホでは位置を上げる */
     .overlay-wrapper {
-        top: 58% !important;
+        top: 56% !important;
         /* 青いエリアに被らないよう、さらに引き上げ */
         display: flex !important;
         flex-direction: column !important;
