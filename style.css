@@ -1,6 +1,6 @@
-/* 全体設定 */
+/* --- 全体設定 --- */
 body {
-    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     margin: 0;
     color: #333;
     line-height: 1.6;
@@ -13,7 +13,30 @@ body {
     padding: 0 20px;
 }
 
-/* ヘッダー */
+/* --- アニメーション --- */
+@keyframes imageFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes textFloatUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* --- ヘッダー --- */
 header {
     background: #fff;
     border-bottom: 3px solid #003366;
@@ -59,16 +82,216 @@ nav a:hover {
     color: #ff8c00;
 }
 
-/* メインビジュアル */
-.hero {
-    background: linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85));
+/* --- 新しいアニメーション定義 --- */
+
+/* 白い線が伸びるアニメーション */
+@keyframes drawLine {
+    from {
+        transform: scaleX(0);
+        /* 最初は幅0 */
+    }
+
+    to {
+        transform: scaleX(1);
+        /* 最終的に幅100% */
+    }
+}
+
+/* --- メインビジュアルエリアのスタイル --- */
+
+/* 文字全体を包むコンテナ */
+.overlay-wrapper {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    width: 100%;
+}
+
+/* AKEBONOのスタイル（親要素） */
+.overlay-text {
+    color: white;
+    font-family: "Times New Roman", "YuMincho", "MS Mincho", serif;
+    font-size: clamp(2.5rem, 10vw, 7rem);
+    font-weight: 900;
+    letter-spacing: 0.35em;
+    /* ★この1行を追加してください */
+    /* 数値を大きくするほど、文字が右へ移動します */
+    padding-left: 0.60em;
+    text-transform: uppercase;
+    text-shadow:
+        0 3px 5px rgba(0, 0, 0, 1.0),
+        /* 1. 文字のすぐ下の濃い影 */
+        0 0 15px rgba(0, 0, 0, 1.0),
+        /* 2. 文字の周りを真っ黒に固める影 */
+        0 0 30px rgba(0, 0, 0, 1.0),
+        /* 3. さらに外側へ広がる深い影 */
+        0 10px 40px rgba(0, 0, 0, 1.0);
+    /* 4. 下方向に大きく落とす重厚な影 */
+    /* 全体の重厚な影 */
+    white-space: nowrap;
+
+    position: relative;
+    display: inline-block;
+    /* 文字の幅に合わせるために必須 */
+    padding-bottom: 0;
+    /* 線との距離 */
+}
+
+/* 白い線のスタイル（真ん中から伸びる設定） */
+.overlay-text::after {
+    content: '';
+    position: absolute;
+    bottom: 25px;
+
+    /* 配置の基本設定 */
+    left: 30px;
+    right: 0;
+    margin: 0 auto;
+    /* 確実に親要素の中央に置く */
+
+    width: 90%;
+    /* 線の長さ（お好みで調整） */
+    max-width: 1500px;
+    height: 5px;
+    background: white;
+
+    /* アニメーションの挙動設定 */
+    transform: scaleX(0);
+    /* 最初は幅を0にする */
+    transform-origin: center;
+    /* ★重要：真ん中を起点に伸びる設定 */
+
+    /* 線が出るタイミング（文字が出終わった2.5秒後に開始） */
+    animation: drawLine 1.2s ease-out 2.5s forwards;
+}
+
+/* 線が伸びるアニメーションの内容 */
+@keyframes drawLine {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+
+/* NEXUSのスタイル */
+.overlay-subtext {
+    color: white;
+    font-family: "Times New Roman", "YuMincho", "MS Mincho", serif;
+    font-size: clamp(6rem, 7vw, 10rem);
+    letter-spacing: 0.25em;
+    text-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.5),
+        0 0 15px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+
+    /* 数値を大きくするほど、右へ移動します。まずは 10px や 20px から試してください */
+    margin-left: 20px;
+
+    /* AKEBONOと横幅の印象を合わせるために display を追加 */
+    display: inline-block;
+
+    /* 線との間隔を調整 */
+    margin-top: 3.2em;
+}
+
+/* 遅れて浮き出るアニメーション（前回の設定を維持） */
+.floating-text {
+    opacity: 0;
+    animation: textFloatUp 2.0s ease-out 1.0s forwards;
+}
+
+/* --- (その他のCSSコードはそのまま維持してください) --- */
+
+/* キャッチコピーのスタイル */
+.overlay-catchphrase {
+    color: white;
+    /* キャッチコピーは読みやすさ重視でゴシック体、または明朝体 */
+    font-family: "Yu Mincho", "MS Mincho", serif;
+    font-size: clamp(1rem, 2vw, 1.8rem);
+    /* Nexusより一回り小さく */
+    letter-spacing: 0.15em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 1.0);
+    /* ここも影をしっかり */
+    opacity: 0.8;
+    /* 少しだけ透けさせてサブ要素感を出す */
+
+    /* Nexusとの間隔 */
+    margin-top: 0em;
+
+    /* AKEBONOたちと一緒に動くように設定 */
+    display: block;
+    width: 100%;
+}
+
+@keyframes textFloatUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -30%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.main-img {
+    width: 100%;
+    height: auto;
+    /* 画像を切り取らずに全部出す */
+    display: block;
+    animation: imageFade 1.5s ease-in-out forwards;
+}
+
+/* 画像の文字に近いフォント設定 */
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    /* 画像のフォントを再現：セリフ体、太字、間隔広め */
+    font-family: "Times New Roman", "YuMincho", "MS Mincho", serif;
+    font-size: clamp(2.5rem, 12vw, 8rem);
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    /* 文字の間隔 */
+    text-transform: uppercase;
+    /* 大文字固定 */
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    z-index: 10;
+    white-space: nowrap;
+}
+
+.floating-text {
+    opacity: 0;
+    animation: textFloatUp 2.0s ease-out 1.0s forwards;
+}
+
+/* --- ヒーローテキストセクション --- */
+.hero-text-area {
+    background: #003366;
     color: white;
     padding: 80px 20px;
     text-align: center;
+    opacity: 0;
+    animation: imageFade 1.5s ease-out 2.5s forwards;
+}
+
+.hero-content h1 {
+    font-size: 2rem;
+    margin-bottom: 15px;
 }
 
 .sub-text {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: #ffcc00;
     font-weight: bold;
     margin-bottom: 20px;
@@ -79,7 +302,6 @@ nav a:hover {
     margin: 0 auto 30px;
 }
 
-/* ボタンとホバー効果 */
 .cta-buttons {
     display: flex;
     justify-content: center;
@@ -93,7 +315,7 @@ nav a:hover {
     border-radius: 5px;
     font-weight: bold;
     color: white;
-    transition: all 0.3s ease;
+    transition: 0.3s;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -107,11 +329,10 @@ nav a:hover {
 
 .btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
     opacity: 0.9;
 }
 
-/* セクション設定 */
+/* --- コンテンツセクション --- */
 .info-section {
     padding: 60px 0;
     border-bottom: 1px solid #eee;
@@ -132,7 +353,6 @@ nav a:hover {
     margin: 10px auto;
 }
 
-/* 選ばれる理由 */
 .reason-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -154,7 +374,6 @@ nav a:hover {
     display: block;
 }
 
-/* サービス内容（背景白） */
 .bg-white-full {
     background: #fff;
     width: 100vw;
@@ -182,7 +401,6 @@ nav a:hover {
     border-top: 4px solid #003366;
 }
 
-/* テーブル */
 .info-table {
     width: 100%;
     border-collapse: collapse;
@@ -216,7 +434,7 @@ nav a:hover {
     margin-bottom: 20px;
 }
 
-/* FAQ */
+/* --- FAQ --- */
 .faq-container {
     max-width: 800px;
     margin: 0 auto;
@@ -231,8 +449,8 @@ nav a:hover {
 
 .faq-item .q {
     font-weight: bold;
-    margin: 0 0 10px;
     color: #003366;
+    margin-bottom: 5px;
 }
 
 .faq-item .a {
@@ -251,5 +469,74 @@ footer {
 @media (max-width: 768px) {
     .footer-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* --- スマホ専用：PC版に影響を与えず、スマホだけ上へ詰める --- */
+@media (max-width: 768px) {
+
+    /* 1. コンテナ：PC版のabsoluteを維持しつつ、スマホでは位置を上げる */
+    .overlay-wrapper {
+        top: 42% !important;
+        /* 青いエリアに被らないよう、さらに引き上げ */
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    /* 2. AKEBONO：スマホ時のみ relative にして縦並びを強制 */
+    .overlay-text {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: scaleX(1.1) !important;
+        /* 横幅をスマホ用に抑える */
+        font-size: 2.2rem !important;
+        letter-spacing: 0.15em !important;
+        padding-left: 0.15em !important;
+        margin-bottom: 0 !important;
+        display: inline-block !important;
+    }
+
+    /* 3. 白い線：文字のすぐ下に配置 */
+    .overlay-text::after {
+        position: static !important;
+        display: block !important;
+        margin: 8px auto !important;
+        /* 隙間を最小限に */
+        width: 85% !important;
+        height: 2px !important;
+        transform: scaleX(1) !important;
+        visibility: visible !important;
+    }
+
+    /* 4. Nexus：線との距離を極限まで詰める */
+    .overlay-subtext {
+        display: block !important;
+        font-size: 2.2rem !important;
+        margin-top: 0 !important;
+        /* 線との隙間をゼロに */
+        margin-left: 0 !important;
+        letter-spacing: 0.1em !important;
+        line-height: 1.0 !important;
+    }
+
+    /* 5. キャッチコピー：全体をコンパクトに */
+    .overlay-catchphrase {
+        font-size: 1rem !important;
+        margin-top: 15px !important;
+        /* Nexusとの距離 */
+        line-height: 1.4 !important;
+        padding: 0 20px !important;
+        white-space: normal !important;
+    }
+
+    /* 6. 背景画像：高さを調整して下のコンテンツを押し上げない */
+    .main-img {
+        height: 55vh !important;
+        object-fit: cover !important;
     }
 }
